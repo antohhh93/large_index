@@ -1,0 +1,10 @@
+.vscode
+.idea/
+.history
+*.DS_Store
+__pycache__
+*.log
+build
+dist
+large_index.egg-info
+.venv
