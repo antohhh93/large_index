@@ -2,7 +2,6 @@
 
 import re
 import requests
-from large_index.log import logging
 from large_index.config import Config
 
 class Cluster(Config):

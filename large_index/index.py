@@ -2,13 +2,13 @@
 
 import re
 import requests
-from large_index.log import logging
+from large_index.log import Log
 from large_index.config import Config
 from large_index.init import Init
 from large_index.request import Request
 from large_index.function import Function
 
-class Index(Config, Request):
+class Index(Config, Request, Log):
   def __init__(self,
     indices: str = [],
     index_details: str = [],
@@ -52,7 +52,7 @@ class Index(Config, Request):
     for details in self.index_details:
       if not self.index_pattern.match(details['index']):
         self.index_to_remove.append(details)
-        logging.warning("[{0}] encountered a strange index name".format(details['index']))
+        self.logger.warning("[{0}] encountered a strange index name".format(details['index']))
 
   def remove_system_index_in_array(self):
     for details in self.index_to_remove:
@@ -72,14 +72,14 @@ class Index(Config, Request):
 
   def create_array_invalid_size_index(self):
     for index in self.indices:
-      if int(index['pri.store.size']) <= self.MAX_CURRENT_INDEX_SIZE_GB:
+      if index['pri.store.size'] is None or int(index['pri.store.size']) <= self.MAX_CURRENT_INDEX_SIZE_GB:
         self.invalid_size_indices.append(index)
 
   def create_array_unmanaged_index(self):
     for index in self.indices:
       if not Config.ilm_list['indices'][index['index']]['managed']:
         self.unmanaged_indices.append(index)
-        logging.warning("[{0}] not management".format(index['index']))
+        self.logger.warning("[{0}] not management".format(index['index']))
 
   def create_array_not_hot_box_index(self):
     for index in self.indices:
@@ -122,7 +122,7 @@ class Index(Config, Request):
 
   def check_create_new_index(self):
     if self.status_request():
-      logging.info("Create new index [{0}] - True".format( self.new_index_name ))
+      self.logger.info("Create new index [{0}] - True".format( self.new_index_name ))
       return True
 
 if __name__ == "__main__":
@@ -136,6 +136,11 @@ if __name__ == "__main__":
   class_function.find_next_index()
 
   class_index = Index()
+  class_index.remove_old_log_file()
+  class_index.get_file_handler()
+  class_index.get_stream_handler()
+  class_index.get_logger()
+
   class_index.create_array_index_details_in_open()
   class_index.create_array_index_to_remove()
   class_index.remove_system_index_in_array()

@@ -2,12 +2,12 @@
 
 import re
 import requests
-from large_index.log import logging
+from large_index.log import Log
 from large_index.config import Config
 from large_index.request import Request
 from large_index.function import Function
 
-class Ilm(Config, Request):
+class Ilm(Config, Request, Log):
   def __init__(self,
   ilm_info_for_index: str = {}
   ):
@@ -26,7 +26,7 @@ class Ilm(Config, Request):
 
   def check_rollover_index(self):
     if self.status_request():
-      logging.info("Rollover index for alias [{0}], new index [{1}] is created".format( self.alias, self.next_index ))
+      self.logger.info("Rollover index for alias [{0}], new index [{1}] is created".format( self.alias, self.next_index ))
       return True
 
   def ilm_retry_for_index(self):
@@ -34,7 +34,7 @@ class Ilm(Config, Request):
 
   def check_ilm_retry_for_index(self):
     if self.status_request():
-      logging.info("Retrying ILM for index [{0}] - True".format( self.index ))
+      self.logger.info("Retrying ILM for index [{0}] - True".format( self.index ))
       return True
 
   def current_ilm_info_for_index(self):
@@ -56,7 +56,7 @@ class Ilm(Config, Request):
 
   def check_next_step_for_index(self):
     if self.status_request():
-      logging.info("Next step ILM for index [{0}] - True".format( self.index ))
+      self.logger.info("Next step ILM for index [{0}] - True".format( self.index ))
       return True
 
 if __name__ == "__main__":
@@ -66,6 +66,11 @@ if __name__ == "__main__":
 
   class_ilm = Ilm()
   class_ilm.debug_detail_index()
+
+  class_ilm.remove_old_log_file()
+  class_ilm.get_file_handler()
+  class_ilm.get_stream_handler()
+  class_ilm.get_logger()
 
   class_ilm.rollover_index()
   class_ilm.next_index = class_function.find_next_index()

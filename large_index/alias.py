@@ -2,13 +2,13 @@
 
 import re
 import requests
-from large_index.log import logging
+from large_index.log import Log
 from large_index.config import Config
 from large_index.init import Init
 from large_index.request import Request
 from large_index.function import Function
 
-class Alias(Config, Request):
+class Alias(Config, Request, Log):
   def __init__(self,
   ):
     super().__init__()
@@ -34,17 +34,17 @@ class Alias(Config, Request):
 
   def check_add_alias_for_index(self):
     if self.status_request():
-      logging.info("Alias [{0}] was added to index [{1}]".format( self.alias, self.index ))
+      self.logger.info("Alias [{0}] was added to index [{1}]".format( self.alias, self.index ))
       return True
 
   def check_disable_write_for_index(self):
     if self.status_request():
-      logging.info("Writing is disabled for the index [{0}]".format( self.index ))
+      self.logger.info("Writing is disabled for the index [{0}]".format( self.index ))
       return True
 
   def check_enable_write_for_index(self):
     if self.status_request():
-      logging.info("Writing is enabled for the index [{0}]".format( self.index ))
+      self.logger.info("Writing is enabled for the index [{0}]".format( self.index ))
       return True
 
 if __name__ == "__main__":
@@ -58,6 +58,11 @@ if __name__ == "__main__":
   class_alias = Alias()
   class_alias.debug_detail_index()
   class_alias.index = class_function.find_next_index()
+
+  class_alias.remove_old_log_file()
+  class_alias.get_file_handler()
+  class_alias.get_stream_handler()
+  class_alias.get_logger()
 
   class_alias.add_alias_for_index()
   class_alias.request_add_alias_for_index()
