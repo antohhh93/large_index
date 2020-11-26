@@ -10,3 +10,5 @@ build
 dist
 large_index.egg-info
 .venv
+
+test

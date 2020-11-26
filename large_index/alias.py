@@ -8,7 +8,7 @@ from large_index.init import Init
 from large_index.request import Request
 from large_index.function import Function
 
-class Alias(Config, Request, Log):
+class Alias(Config, Request):
   def __init__(self,
   ):
     super().__init__()
@@ -52,6 +52,12 @@ if __name__ == "__main__":
   class_config.index_pools = Init(count = 4).list_pools()
   class_config.alias_list = class_config.index_pools[1].json()
 
+  class_log = Log()
+  class_log.remove_old_log_file()
+  class_log.get_file_handler()
+  class_log.get_stream_handler()
+  class_log.get_logger()
+
   class_function = Function()
   class_function.debug_detail_index()
 
@@ -59,10 +65,7 @@ if __name__ == "__main__":
   class_alias.debug_detail_index()
   class_alias.index = class_function.find_next_index()
 
-  class_alias.remove_old_log_file()
-  class_alias.get_file_handler()
-  class_alias.get_stream_handler()
-  class_alias.get_logger()
+  class_alias.logger = class_log.logger
 
   class_alias.add_alias_for_index()
   class_alias.request_add_alias_for_index()

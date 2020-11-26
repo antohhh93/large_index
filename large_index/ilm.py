@@ -7,7 +7,7 @@ from large_index.config import Config
 from large_index.request import Request
 from large_index.function import Function
 
-class Ilm(Config, Request, Log):
+class Ilm(Config, Request):
   def __init__(self,
   ilm_info_for_index: str = {}
   ):
@@ -60,6 +60,12 @@ class Ilm(Config, Request, Log):
       return True
 
 if __name__ == "__main__":
+  class_log = Log()
+  class_log.remove_old_log_file()
+  class_log.get_file_handler()
+  class_log.get_stream_handler()
+  class_log.get_logger()
+
   class_function = Function()
   class_function.debug_detail_index()
   class_function.find_next_index()
@@ -67,10 +73,7 @@ if __name__ == "__main__":
   class_ilm = Ilm()
   class_ilm.debug_detail_index()
 
-  class_ilm.remove_old_log_file()
-  class_ilm.get_file_handler()
-  class_ilm.get_stream_handler()
-  class_ilm.get_logger()
+  class_ilm.logger = class_log.logger
 
   class_ilm.rollover_index()
   class_ilm.next_index = class_function.find_next_index()

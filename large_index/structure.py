@@ -13,7 +13,7 @@ from large_index.alias import Alias
 from large_index.cluster import Cluster
 from large_index.function import Function
 
-class Structure(Index, Ilm, Alias, Function, Cluster, Request, Log):
+class Structure(Index, Ilm, Alias, Function, Cluster, Request):
   def cluster_status(self):
     while True:
       self.get_status_cluster()
@@ -174,11 +174,14 @@ if __name__ == "__main__":
   class_config.settings_list = class_config.index_pools[2].json()
   class_config.alias_list = class_config.index_pools[1].json()
 
+  class_log = Log()
+  class_log.remove_old_log_file()
+  class_log.get_file_handler()
+  class_log.get_stream_handler()
+  class_log.get_logger()
+
   class_structure = Structure()
-  class_structure.remove_old_log_file()
-  class_structure.get_file_handler()
-  class_structure.get_stream_handler()
-  class_structure.get_logger()
+  class_structure.logger = class_log.logger
 
   class_structure.create_array_index_details_in_open()
   class_structure.create_array_index_to_remove()

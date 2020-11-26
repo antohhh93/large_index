@@ -3,7 +3,7 @@
 import time
 from large_index.log import Log
 
-class Function(Log):
+class Function:
   def __init__(self,
     next_index: str = '',
     retry: int = 0,
@@ -14,6 +14,7 @@ class Function(Log):
 
   def debug_detail_index(self):
     self.index = 'test-000001'
+    self.retry = 1
 
   def find_next_index(self):
     alias = self.index[:-6]
@@ -27,13 +28,16 @@ class Function(Log):
       time.sleep(60 * self.retry)
 
 if __name__ == "__main__":
+  class_log = Log()
+  class_log.remove_old_log_file()
+  class_log.get_file_handler()
+  class_log.get_stream_handler()
+  class_log.get_logger()
+
   class_function = Function()
   class_function.debug_detail_index()
 
-  class_function.remove_old_log_file()
-  class_function.get_file_handler()
-  class_function.get_stream_handler()
-  class_function.get_logger()
+  class_function.logger = class_log.logger
 
   class_function.find_next_index()
   class_function.time_sleep()

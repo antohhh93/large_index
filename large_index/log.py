@@ -6,13 +6,15 @@ from os import path, remove
 
 class Log:
   def __init__(self,
+    log_file_name: str = 'large_index.log'
   ):
     super().__init__()
+    self.log_file_name = log_file_name
     self.logger = logging.getLogger(__name__)
     self.log_file_format = logging.Formatter('[%(asctime)s] %(levelname)s - %(message)s')
 
   def get_file_handler(self):
-    self.file_handler = logging.FileHandler('large_index.log')
+    self.file_handler = logging.FileHandler(self.log_file_name)
     self.file_handler.setFormatter(self.log_file_format)
 
   def get_stream_handler(self):
@@ -25,8 +27,8 @@ class Log:
     self.logger.addHandler(self.stream_handler)
 
   def remove_old_log_file(self):
-    if path.isfile('large_index.log'):
-      remove('large_index.log')
+    if path.isfile(self.log_file_name):
+      remove(self.log_file_name)
 
 if __name__ == "__main__":
   class_log = Log()

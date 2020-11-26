@@ -8,7 +8,7 @@ from large_index.init import Init
 from large_index.request import Request
 from large_index.function import Function
 
-class Index(Config, Request, Log):
+class Index(Config, Request):
   def __init__(self,
     indices: str = [],
     index_details: str = [],
@@ -131,15 +131,18 @@ if __name__ == "__main__":
   class_config.ilm_list = class_config.index_pools[3].json()
   class_config.settings_list = class_config.index_pools[2].json()
 
+  class_log = Log()
+  class_log.remove_old_log_file()
+  class_log.get_file_handler()
+  class_log.get_stream_handler()
+  class_log.get_logger()
+
   class_function = Function()
   class_function.debug_detail_index()
   class_function.find_next_index()
 
   class_index = Index()
-  class_index.remove_old_log_file()
-  class_index.get_file_handler()
-  class_index.get_stream_handler()
-  class_index.get_logger()
+  class_index.logger = class_log.logger
 
   class_index.create_array_index_details_in_open()
   class_index.create_array_index_to_remove()
